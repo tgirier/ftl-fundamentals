@@ -71,11 +71,15 @@ func StringCalc(s string) (float64, error) {
 		if r == '+' || r == '-' || r == '*' || r == '/' {
 			operator = r
 			operatorIndex = i
+			break
 		}
 	}
 
-	if operatorIndex == 0 || operatorIndex >= len(s)-1 {
-		return 0, errors.New("unsupported operation")
+	if operatorIndex == 0 {
+		return 0, errors.New("missing supported operator")
+	}
+	if operatorIndex >= len(s)-1 {
+		return 0, errors.New("missing second number after operator")
 	}
 
 	s1 := strings.TrimSpace(s[:operatorIndex])

@@ -146,6 +146,7 @@ func TestStringCalc(t *testing.T) {
 		{name: "Divide", input: "18   /   6", want: 3, errExpected: false},
 		{name: "Not an operation", input: "19", want: 0, errExpected: true},
 		{name: "Not enough numbers", input: "1+", want: 0, errExpected: true},
+		{name: "Two operators", input: "1+1/3", want: 0, errExpected: true},
 	}
 
 	for _, tc := range testCases {
