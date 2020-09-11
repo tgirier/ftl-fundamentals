@@ -64,45 +64,45 @@ func Sqrt(a float64) (float64, error) {
 // StringCalc takes a string of the form number one / operator / number two (ex: ‘12 * 3')
 // and returns the resutl of the calculus.
 func StringCalc(s string) (float64, error) {
-	operators := strings.ContainsAny(s, "+-*/")
-	if !operators {
-		return 0, errors.New("no operators found in input string")
+	var operatorIndex int
+	var operator rune
+
+	for i, r := range s {
+		if r == '+' || r == '-' || r == '*' || r == '/' {
+			operator = r
+			operatorIndex = i
+		}
 	}
 
-	r := strings.FieldsFunc(s, splitOperator)
+	if operatorIndex == 0 || operatorIndex >= len(s)-1 {
+		return 0, errors.New("unsupported operation")
+	}
 
-	a, err := toFloat(r[0])
+	s1 := strings.TrimSpace(s[:operatorIndex])
+	s2 := strings.TrimSpace(s[operatorIndex+1:])
+
+	a, err := strconv.ParseFloat(s1, 64)
 	if err != nil {
 		return 0, errors.New("first number is not a floating point number")
 	}
 
-	b, err := toFloat(r[1])
+	b, err := strconv.ParseFloat(s2, 64)
 	if err != nil {
 		return 0, errors.New("second number is not a floating point number")
 	}
 
 	var result float64
 
-	switch {
-	case strings.ContainsRune(s, '+'):
+	switch operator {
+	case '+':
 		result = Add(a, b)
-	case strings.ContainsRune(s, '-'):
+	case '-':
 		result = Subtract(a, b)
-	case strings.ContainsRune(s, '*'):
+	case '*':
 		result = Multiply(a, b)
-	case strings.ContainsRune(s, '/'):
+	case '/':
 		result, err = Divide(a, b)
 	}
 
 	return result, err
-}
-
-func splitOperator(r rune) bool {
-	return r == '+' || r == '-' || r == '*' || r == '/'
-}
-
-func toFloat(s string) (float64, error) {
-	s = strings.TrimSpace(s)
-	f, err := strconv.ParseFloat(s, 64)
-	return f, err
 }

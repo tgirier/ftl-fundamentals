@@ -142,7 +142,8 @@ func TestStringCalc(t *testing.T) {
 		{name: "Substract", input: "100-0.1", want: 99.9, errExpected: false},
 		{name: "Multiply", input: "2*2", want: 4, errExpected: false},
 		{name: "Divide", input: "18   /   6", want: 3, errExpected: false},
-		{name: "Error", input: "19", want: 0, errExpected: true},
+		{name: "Not an operation", input: "19", want: 0, errExpected: true},
+		{name: "Not enough numbers", input: "1+", want: 0, errExpected: true},
 	}
 
 	for _, tc := range testCases {
