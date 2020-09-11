@@ -2,6 +2,7 @@ package calculator_test
 
 import (
 	"calculator"
+	"math"
 	"math/rand"
 	"testing"
 	"time"
@@ -115,6 +116,7 @@ func TestSqrt(t *testing.T) {
 		{name: "Positive Number", a: 144, want: 12, errExpected: false},
 		{name: "Negative number", a: -2, want: 0, errExpected: true},
 		{name: "Zero", a: 0, want: 0, errExpected: false},
+		{name: "Non rational values", a: 2, want: 1.414, errExpected: false},
 	}
 
 	for _, tc := range testCases {
@@ -123,7 +125,7 @@ func TestSqrt(t *testing.T) {
 		if tc.errExpected != errReceived {
 			t.Fatalf("%s - Sqrt(%f): unexpected error status: %v", tc.name, tc.a, err)
 		}
-		if !tc.errExpected && tc.want != got {
+		if !tc.errExpected && math.Abs(tc.want-got) > 0.01 {
 			t.Fatalf("%s - Sqrt(%f): want %f, got %f", tc.name, tc.a, tc.want, got)
 		}
 	}
